@@ -19,6 +19,7 @@ Pacman agents (in searchAgents.py).
 
 import util
 
+
 class SearchProblem:
     """
     This class outlines the structure of a search problem, but doesn't implement
@@ -71,7 +72,8 @@ def tinyMazeSearch(problem):
     from game import Directions
     s = Directions.SOUTH
     w = Directions.WEST
-    return  [s, s, w, s, w, w, s, w]
+    return [s, s, w, s, w, w, s, w]
+
 
 def depthFirstSearch(problem):
     """
@@ -92,7 +94,7 @@ def depthFirstSearch(problem):
     stack = util.Stack()
     start_state = problem.getStartState()
     visited = []
-    stack.push((start_state, [], 0)) #(state, actions, cost)
+    stack.push((start_state, [], 0))  # (state, actions, cost)
     while not stack.isEmpty():
         current_state, current_action, current_cost = stack.pop()
 
@@ -105,6 +107,7 @@ def depthFirstSearch(problem):
                 stack.push((next_state, current_action + [next_action], current_cost + next_cost))
 
     util.raiseNotDefined()
+
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
@@ -126,10 +129,12 @@ def breadthFirstSearch(problem):
 
     util.raiseNotDefined()
 
+
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
+
 
 def nullHeuristic(state, problem=None):
     """
@@ -138,9 +143,27 @@ def nullHeuristic(state, problem=None):
     """
     return 0
 
+
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
+    priorityQueue = util.PriorityQueue()
+    start_state = problem.getStartState()
+    visited = []
+    priorityQueue.push((start_state, [], 0), 0)  # ((state, actions, cost),priorityQueue)
+    while not priorityQueue.isEmpty():
+        current_state, current_action, current_cost = priorityQueue.pop()
+
+        if problem.isGoalState(current_state):
+            return current_action
+
+        if current_state not in visited:
+            visited.append(current_state)
+            for next_state, next_action, next_cost in problem.getSuccessors(current_state):
+                action = current_action + [next_action]
+                cost = current_cost + next_cost
+                heuristicCost = cost + heuristic(next_state, problem)
+                priorityQueue.push((next_state, action, cost), heuristicCost)
     util.raiseNotDefined()
 
 
