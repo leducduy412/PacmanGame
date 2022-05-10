@@ -286,12 +286,13 @@ to follow your instructor's guidelines to receive credit on your project.
       self.addMessage(message, raw)
 
   def addMessage(self, message, raw=False):
+    import html
     if not raw:
         # We assume raw messages, formatted for HTML, are printed separately
         if self.mute: util.unmutePrint()
         print('*** ' + message)
         if self.mute: util.mutePrint()
-        message = cgi.escape(message)
+        message = html.escape(message)
     self.messages[self.currentQuestion].append(message)
 
   def addMessageToEmail(self, message):
