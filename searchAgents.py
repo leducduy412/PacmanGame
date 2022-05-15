@@ -305,9 +305,7 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        start_state = (self.startingPosition)  # full state in the form Tuple(state, corner_remaining)
-        corners = self.corners
-        return (start_state, corners)
+        return (self.startingPosition, self.corners)
         util.raiseNotDefined()
 
     def isGoalState(self, state):
@@ -315,9 +313,8 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        if len(state[1]) == 0:  # no corners left i.e all corners touched
-            return True
-        return False
+        "nếu không còn corners thì win"
+        return len(state[1]) == 0  # no corners left i.e all corners touched
         util.raiseNotDefined()
 
     def getSuccessors(self, state):
@@ -329,6 +326,14 @@ class CornersProblem(search.SearchProblem):
             action, stepCost), where 'successor' is a successor to the current
             state, 'action' is the action required to get there, and 'stepCost'
             is the incremental cost of expanding to that successor
+        """
+        """ 
+        Trả về các state kề với state hiện tại, phải kiểm tra state kề có phải tường hay corners hay không 
+        Nếu là corners thì phải cập nhật số corners còn lại"
+        """
+        """
+        state là tuple lữu trữ state[0] và một mảng corners
+        state[0] = (current_state, action, stepCost)
         """
 
         successors = []
@@ -344,8 +349,7 @@ class CornersProblem(search.SearchProblem):
             x, y = state[0]
             dx, dy = Actions.directionToVector(action)  # getting unit vector to that direction. For eg, North action will be (0,1).
             next_state = nextx, nexty = int(x + dx), int(y + dy)  # This step calculates the next state by adding the respective
-            # direction unit vector to the current state.
-            if (not self.walls[nextx][nexty]):
+            if not self.walls[nextx][nexty]: # Pick valid movement #
                 corners_remaining = list(state[1])
                 if next_state in corners_remaining:
                     corners_remaining.remove(next_state)  # if the next state is a corner than remove the corner from the list.
